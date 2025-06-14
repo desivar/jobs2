@@ -38,8 +38,9 @@ const protect = asyncHandler(async (req, res, next) => {
     }
 });
 
-// Middleware to check for admin role
+// Middleware to check for admin role (COMMON for job trackers to have admins)
 const admin = (req, res, next) => {
+    // This assumes your User model has a 'role' field, and 'admin' is one of the roles
     if (req.user && req.user.role === 'admin') {
         next();
     } else {
@@ -48,25 +49,4 @@ const admin = (req, res, next) => {
     }
 };
 
-// Middleware to check for Stake Leader role
-const stakeLeader = (req, res, next) => {
-    if (req.user && req.user.role === 'stake_leader') {
-        next();
-    } else {
-        res.status(403);
-        throw new Error('Not authorized as a Stake Leader');
-    }
-};
-
-// Middleware to check for Teacher role
-const teacher = (req, res, next) => {
-    if (req.user && req.user.role === 'teacher') {
-        next();
-    } else {
-        res.status(403);
-        throw new Error('Not authorized as a Teacher');
-    }
-};
-
-
-module.exports = { protect, admin, stakeLeader, teacher };
+module.exports = { protect, admin }; // Only export protect and admin for a typical job tracker
