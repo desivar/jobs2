@@ -1,24 +1,30 @@
+// backend/models/User.js
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs'); // For password hashing
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique: true, // Ensures no two users have the same username
-        trim: true // Removes whitespace from start/end
+        unique: true,
+        trim: true
     },
     password: {
         type: String,
         required: true
     },
-    email: { // Optional but good for registration
+    email: {
         type: String,
-        required: false, // Make it false if you only want username for login
+        required: false,
         unique: true,
-        sparse: true, // Allows multiple documents to have a null value for email
+        sparse: true, // Allows null values for unique fields
         trim: true,
-        lowercase: true // Store emails in lowercase
+        lowercase: true
+    },
+    role: { // Added for future expansion (e.g., 'user', 'teacher', 'stake_leader')
+        type: String,
+        enum: ['user', 'teacher', 'stake_leader', 'admin'], // Define possible roles
+        default: 'user'
     },
     createdAt: {
         type: Date,
@@ -26,17 +32,17 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-// Pre-save hook to hash password before saving to the database
+// Hash password before saving
 UserSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) { // Only hash if password field is modified
-        next();
+    if (!this.isModified('password')) {
+        return next();
     }
-    const salt = await bcrypt.genSalt(10); // Generate a salt
-    this.password = await bcrypt.hash(this.password, salt); // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
     next();
 });
 
-// Method to compare entered password with hashed password in the database
+// Method to compare entered password with hashed password
 UserSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
