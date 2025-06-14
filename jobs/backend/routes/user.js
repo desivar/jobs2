@@ -1,24 +1,25 @@
 // backend/routes/user.js
 
-const express = require("express");
-const router = express.Router(); // <--- FIX 1: Change this line to express.Router()
-const userCon = require("../controllers/user");
-const authMiddleware = require("../middleware/authMiddleware");
+const express = require('express');
+const router = express.Router();
+const {
+    getUsers,
+    getUserProfile,
+    updateUserProfile,
+    deleteUser,
+} = require('../controllers/userController'); // Import your controller functions
+const { protect, admin } = require('../middleware/authMiddleware'); // Import your authentication middleware
 
-// --- Public Routes ---
-router.post("/register", userCon.createUser);
+// Public authentication routes (Register/Login are usually in auth.js)
+// router.post('/register', registerUser); // Moved to auth.js  <--- THIS IS LIKELY THE PROBLEM
+// router.post('/login', loginUser);       // Moved to auth.js  <--- AND THIS
 
-// --- Protected Routes ---
-// GET all users (typically for admin views, requires auth)
-router.get("/", authMiddleware.protect, userCon.getAllUsers); // <--- FIX 2: Add .protect
-// Get the currently logged-in user's profile
-router.get('/me', authMiddleware.protect, userCon.getLoggedInUserProfile); // <--- FIX 2: Add .protect
-// GET user by ID (for admin viewing specific users, requires auth)
-router.get("/:id", authMiddleware.protect, userCon.getUserById); // <--- FIX 2: Add .protect
-// PUT update user by ID (requires auth)
-router.put("/:id", authMiddleware.protect, userCon.updateUser); // <--- FIX 2: Add .protect
-// DELETE user by ID (requires auth)
-router.delete("/:id", authMiddleware.protect, userCon.deleteUser); // <--- FIX 2: Add .protect
+// Protected routes (require a valid JWT)
+router.get('/profile', protect, getUserProfile);
+router.put('/profile', protect, updateUserProfile);
 
+// Admin-specific routes (require a valid JWT AND admin role)
+router.get('/', protect, admin, getUsers);
+router.delete('/:id', protect, admin, deleteUser);
 
 module.exports = router;
