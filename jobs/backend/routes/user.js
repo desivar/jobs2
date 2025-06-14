@@ -1,5 +1,4 @@
 // backend/routes/user.js
-
 const express = require('express');
 const router = express.Router();
 const {
@@ -7,17 +6,15 @@ const {
     getUserProfile,
     updateUserProfile,
     deleteUser,
-} = require('../controllers/userController'); // Import your controller functions
-const { protect, admin } = require('../middleware/authMiddleware'); // Import your authentication middleware
+} = require('../controllers/userController'); // Ensure correct path and destructuring
+const { protect, admin } = require('../middleware/authMiddleware'); // Ensure correct path and destructuring
 
+// Protected routes (require valid JWT)
+router.get('/profile', protect, getUserProfile); // GET /api/users/profile
+router.put('/profile', protect, updateUserProfile); // PUT /api/users/profile
 
-
-// Protected routes (require a valid JWT)
-router.get('/profile', protect, getUserProfile);
-router.put('/profile', protect, updateUserProfile);
-
-// Admin-specific routes (require a valid JWT AND admin role)
-router.get('/', protect, admin, getUsers);
-router.delete('/:id', protect, admin, deleteUser);
+// Admin-specific routes (require valid JWT AND admin role)
+router.get('/', protect, admin, getUsers); // GET /api/users
+router.delete('/:id', protect, admin, deleteUser); // DELETE /api/users/:id
 
 module.exports = router;
