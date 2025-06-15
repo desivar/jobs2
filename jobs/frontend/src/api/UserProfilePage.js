@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getUserProfile, updateUserProfile } from './UserPofrilePage';
+import { getUserProfile, updateUserProfile } from './UserProfilePage';
 
 const UserProfilePage = () => {
   const [user, setUser] = useState(null);
