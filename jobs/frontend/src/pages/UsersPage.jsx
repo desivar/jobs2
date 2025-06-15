@@ -1,7 +1,7 @@
 // src/pages/UsersPage.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllUsers, deleteUser } from '../api/users'; // API functions
+import { getAllUsers, deleteUser } from '../api/UserPofrilePage'; // API functions
 
 function UsersPage() {
   const [users, setUsers] = useState([]);
