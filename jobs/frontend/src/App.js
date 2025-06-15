@@ -9,7 +9,6 @@ import CustomerDetailsPage from './pages/CustomerDetailsPage';
 import PipelineBoard from './pages/PipelineBoard';
 import PipelinesPage from './pages/PipelinesPage'; // For managing pipeline definitions
 import UsersPage from './pages/UsersPage'; // For user management
-import UserProfilePage from './pages/UserProfilePage'; // For individual user profile
 
 // A simple mock for authentication status
 // In a real app, this would come from AuthContext/Redux
@@ -45,8 +44,7 @@ function App() {
           <Route path="/pipelines/:id" element={<PrivateRoute><div>Edit Pipeline (TODO)</div></PrivateRoute>} />
 
           <Route path="/users" element={<PrivateRoute><UsersPage /></PrivateRoute>} />
-          <Route path="/users/:id" element={<PrivateRoute><UserProfilePage /></PrivateRoute>} /> {/* For admin to edit user */}
-          <Route path="/profile" element={<PrivateRoute><UserProfilePage /></PrivateRoute>} /> {/* For user's own profile */}
+          
 
           {/* Catch-all for 404 */}
           <Route path="*" element={<h2>404: Page Not Found</h2>} />
