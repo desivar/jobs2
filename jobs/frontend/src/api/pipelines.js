@@ -1,8 +1,9 @@
 // frontend/src/api/pipelines.js
 // Complete API Integration for Pipelines
 
+import { useState, useEffect } from 'react';
 
-const API_BASE_URL = process.env.REACT_APP_API_URI || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 //=============================================================================
 // API HELPER FUNCTIONS
@@ -134,11 +135,10 @@ export const updatePipelineStages = async (id, stages) => {
     throw error;
   }
 };
+
 //=============================================================================
 // REACT HOOK FOR PIPELINES (Custom Hook)
 //=============================================================================
-
-import { useState, useEffect } from 'react';
 
 // Custom hook for managing pipelines state
 export const usePipelines = () => {
