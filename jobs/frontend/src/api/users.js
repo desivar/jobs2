@@ -221,10 +221,6 @@ export const changePassword = async (currentPassword, newPassword) => {
 };
 
 //=============================================================================
-// REACT HOOKS FOR USER MANAGEMENT
-// (moved import to top of file)
-
-import { useState, useEffect, useContext, createContext } from 'react';
 
 // Auth Context
 const AuthContext = createContext();
