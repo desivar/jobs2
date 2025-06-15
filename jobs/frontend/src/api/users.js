@@ -390,32 +390,3 @@ export const getCurrentUser = () => {
   }
 };
 
-//=============================================================================
-// EXPORT ALL FUNCTIONS
-//=============================================================================
-
-export default {
-  // Profile functions
-  getUserProfile,
-  updateUserProfile,
-  
-  // Admin functions
-  getAllUsers,
-  deleteUser,
-  
-  // Auth functions
-  registerUser,
-  loginUser,
-  logoutUser,
-  forgotPassword,
-  resetPassword,
-  changePassword,
-  
-  // Hooks
-  useAuth,
-  useAdminUsers,
-  
-  // Utilities
-  isAdmin,
-  getCurrentUser
-};
