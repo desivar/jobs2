@@ -25,9 +25,9 @@ app.use(express.urlencoded({ extended: false })); // Body parser for URL-encoded
 app.use('/api/auth', require('./routes/auth')); // Authentication routes
 app.use('/api/users', require('./routes/user')); // User management routes
 // Add your other routes here:
-// app.use('/api/customers', require('./routes/customers'));
-// app.use('/api/jobs', require('./routes/jobs'));
-// app.use('/api/pipelines', require('./routes/pipelines'));
+app.use('/api/customers', require('./routes/customers'));
+app.use('/api/jobs', require('./routes/jobs'));
+ app.use('/api/pipelines', require('./routes/pipelines'));
 
 // Error handling middleware (optional, but good practice)
 // This should be the last middleware loaded
