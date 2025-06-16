@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../api/users'; 
+import { useAuth } from '../context/AuthContext';
 
 import { usePipelines } from '../api/pipelines';
 import { 
