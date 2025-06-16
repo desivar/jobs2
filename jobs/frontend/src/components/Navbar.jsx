@@ -51,7 +51,8 @@ function Navbar() {
 
         {/* Right section: Logout Button */}
         <div>
-          {isAuthenticated() && (
+          {/* CORRECTED: Removed () from isAuthenticated as it's a boolean, not a function */}
+          {isAuthenticated && ( 
             <button
               onClick={handleLogout}
               className="flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out"
