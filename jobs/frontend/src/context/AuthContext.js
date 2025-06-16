@@ -1,6 +1,6 @@
 // src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import apiClient from '../api/apiClient'; // Make sure this path is correct relative to this file
+import apiClient from '../api/apiClient'; // Ensure this path is correct relative to this file
 
 const AuthContext = createContext(null);
 
@@ -9,20 +9,19 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  // Effect to check authentication status on component mount
+  // Check for token on app load to keep user logged in
   useEffect(() => {
     const checkAuthStatus = async () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          // This endpoint on your backend should return the authenticated user's data
-          // It corresponds to your backend's /api/users/me route handled by getMe
-          const response = await apiClient.get('/users/me');
-          setUser(response.data); // Assuming your backend returns the user object directly
+          // Validate token with backend and get user data
+          const response = await apiClient.get('/users/me'); // Hits your backend's /api/users/me
+          setUser(response.data);
           setIsAuthenticated(true);
         } catch (error) {
           console.error('Token validation failed or expired:', error);
-          localStorage.removeItem('token'); // Remove invalid token
+          localStorage.removeItem('token'); // Clear bad token
           setUser(null);
           setIsAuthenticated(false);
         }
@@ -32,18 +31,18 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, []);
 
-  // Login function
+  // Login function to call your backend
   const login = async (credentials) => {
     try {
-      const response = await apiClient.post('/auth/login', credentials); // Your login endpoint
-      const { token, ...userData } = response.data; // Assuming your backend returns token and user data
-      localStorage.setItem('token', token);
-      setUser(userData); // Store user data (excluding token) in state
+      const response = await apiClient.post('/auth/login', credentials); // Hits your backend's /api/auth/login
+      const { token, ...userData } = response.data;
+      localStorage.setItem('token', token); // Save token for future requests
+      setUser(userData); // Save user data to state
       setIsAuthenticated(true);
-      return true; // Indicate success
+      return true; // Indicate successful login
     } catch (error) {
       console.error('Login failed:', error);
-      throw error; // Re-throw to be handled by the login component
+      throw error; // Re-throw error for component to handle (e.g., display message)
     }
   };
 
@@ -52,7 +51,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
-    // Optionally, redirect to login page here (e.g., using navigate from react-router-dom)
   };
 
   const value = {
@@ -65,7 +63,6 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {/* Optionally, show a loading spinner while checking auth status */}
       {loadingAuth ? (
         <div style={{ padding: '20px', textAlign: 'center' }}>Loading authentication...</div>
       ) : (
@@ -75,7 +72,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook to consume the AuthContext
+// Custom hook to use authentication state in any component
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
