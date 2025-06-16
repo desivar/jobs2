@@ -1,114 +1,66 @@
 // src/components/Navbar.jsx
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { logoutUser } from '../api/auth'; // Assuming you have this function
+import { useAuth } from '../context/AuthContext'; // Make sure this path is correct
+import { LogOut } from 'lucide-react'; // Import LogOut icon for the button
 
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const { isAuthenticated, logout } = useAuth(); // Get auth state and logout function from context
+
   const handleLogout = () => {
-    logoutUser();
+    logout(); // Use the logout function from AuthContext
     navigate('/login'); // Redirect to login page after logout
   };
-  
-  // Simple authentication check for showing/hiding logout
-  const isAuthenticated = () => !!localStorage.getItem('token');
-  
-  // Helper function to check if link is active
-  const isActive = (path) => location.pathname === path;
-  
-  // Don't show navbar on login page
-  if (location.pathname === '/login') {
+
+  // Don't show navbar on login or register pages
+  if (location.pathname === '/login' || location.pathname === '/register') {
     return null;
   }
-  
-  const linkStyle = {
-    color: 'white',
-    textDecoration: 'none',
-    padding: '8px 12px',
-    borderRadius: '4px',
-    transition: 'background-color 0.2s ease'
-  };
-  
-  const activeLinkStyle = {
-    ...linkStyle,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    fontWeight: 'bold'
-  };
-  
+
+  // Tailwind CSS classes for consistent styling
+  const linkClasses = (path) =>
+    `px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-700 hover:text-white 
+    ${location.pathname === path ? 'bg-gray-900' : 'text-gray-300'}`;
+
   return (
-    <nav style={{ 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center',
-      padding: '10px 20px', 
-      backgroundColor: '#333', 
-      color: 'white', 
-      position: 'fixed', 
-      width: 'calc(100% - 40px)', 
-      top: 0, 
-      left: 0, 
-      zIndex: 1000,
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-        <Link 
-          to="/dashboard" 
-          style={isActive('/dashboard') ? activeLinkStyle : linkStyle}
-        >
-          Dashboard
-        </Link>
-        <Link 
-          to="/customers" 
-          style={isActive('/customers') ? activeLinkStyle : linkStyle}
-        >
-          Customers
-        </Link>
-        <Link 
-          to="/jobs" 
-          style={isActive('/jobs') ? activeLinkStyle : linkStyle}
-        >
-          Jobs
-        </Link>
-        <Link 
-          to="/pipelines" 
-          style={isActive('/pipelines') ? activeLinkStyle : linkStyle}
-        >
-          Pipelines
-        </Link>
-        <Link 
-          to="/users" 
-          style={isActive('/users') ? activeLinkStyle : linkStyle}
-        >
-          Users
-        </Link>
-        <Link 
-          to="/profile" 
-          style={isActive('/profile') ? activeLinkStyle : linkStyle}
-        >
-          Profile
-        </Link>
-      </div>
-      <div>
-        {isAuthenticated() && (
-          <button 
-            onClick={handleLogout} 
-            style={{ 
-              background: 'none', 
-              border: '1px solid white', 
-              color: 'white', 
-              padding: '8px 15px', 
-              cursor: 'pointer',
-              borderRadius: '4px',
-              transition: 'background-color 0.2s ease'
-            }}
-            onMouseOver={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
-            onMouseOut={(e) => e.target.style.backgroundColor = 'transparent'}
-          >
-            Logout
-          </button>
-        )}
+    <nav className="bg-gray-800 p-4 fixed w-full top-0 left-0 z-50 shadow-md">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        {/* Left section: Navigation Links */}
+        <div className="flex items-center space-x-4">
+          <Link to="/dashboard" className={linkClasses('/dashboard')}>
+            Dashboard
+          </Link>
+          <Link to="/customers" className={linkClasses('/customers')}>
+            Customers
+          </Link>
+          <Link to="/jobs" className={linkClasses('/jobs')}>
+            Jobs
+          </Link>
+          <Link to="/pipelines" className={linkClasses('/pipelines')}>
+            Pipelines
+          </Link>
+          <Link to="/users" className={linkClasses('/users')}>
+            Users
+          </Link>
+          <Link to="/profile" className={linkClasses('/profile')}>
+            Profile
+          </Link>
+        </div>
+
+        {/* Right section: Logout Button */}
+        <div>
+          {isAuthenticated() && (
+            <button
+              onClick={handleLogout}
+              className="flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out"
+            >
+              <LogOut className="mr-1 h-4 w-4" />
+              Logout
+            </button>
+          )}
+        </div>
       </div>
     </nav>
   );
