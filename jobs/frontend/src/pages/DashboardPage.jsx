@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../api/UserProfilePage';
+import { useAuth } from '../api/users'; // ✅ CORRECT
+
 import { usePipelines } from '../api/pipelines';
 import { 
   BarChart, 
